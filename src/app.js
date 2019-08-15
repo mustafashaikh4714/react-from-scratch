@@ -1,35 +1,29 @@
-console.log('Inside app JSX')
-
-let app = {
-  title: 'Make ToDo',
-  subtitle: 'Put your life in the hands of computer!'
+let count = 0
+const addOne = () => {
+  count++
+  renderConterApp()
 }
-
-let template = (
-  <div>
-    <h1>{app.title}</h1>
-    <p>{app.subtitle}</p>
-  </div>
-)
-
-let user = {
-  name: 'Mustafa',
-  age: 20,
-  location: ''
+const removeOne = () => {
+  count--
+  renderConterApp()
 }
-
-function getLocation(location) {
-  if (location) return <p>Location: {location}</p>
+const reset = () => {
+  count = 0
+  renderConterApp()
 }
-
-let templateTwo = (
-  <div>
-    <h1>{app.title}</h1>
-    <p>{user.name ? user.name : 'Anonymous'}</p>
-    {user.age >= 18 && <p>{user.age}</p>}
-    <p>{getLocation(user.location)}</p>
-  </div>
-)
 
 let appRoute = document.getElementById('app')
-ReactDOM.render(templateTwo, appRoute)
+
+const renderConterApp = () => {
+  const template = (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={addOne}>+1</button>
+      <button onClick={removeOne}>-1</button>
+      <button onClick={reset}>Reset</button>
+    </div>
+  )
+  ReactDOM.render(template, appRoute)
+}
+
+renderConterApp()

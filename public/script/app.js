@@ -1,66 +1,48 @@
 'use strict';
 
-console.log('Inside app JSX');
-
-var app = {
-  title: 'Make ToDo',
-  subtitle: 'Put your life in the hands of computer!'
+var count = 0;
+var addOne = function addOne() {
+  count++;
+  renderConterApp();
 };
-
-var template = React.createElement(
-  'div',
-  null,
-  React.createElement(
-    'h1',
-    null,
-    app.title
-  ),
-  React.createElement(
-    'p',
-    null,
-    app.subtitle
-  )
-);
-
-var user = {
-  name: 'Mustafa',
-  age: 20,
-  location: ''
+var removeOne = function removeOne() {
+  count--;
+  renderConterApp();
 };
-
-function getLocation(location) {
-  if (location) return React.createElement(
-    'p',
-    null,
-    'Location: ',
-    location
-  );
-}
-
-var templateTwo = React.createElement(
-  'div',
-  null,
-  React.createElement(
-    'h1',
-    null,
-    app.title
-  ),
-  React.createElement(
-    'p',
-    null,
-    user.name ? user.name : 'Anonymous'
-  ),
-  user.age >= 18 && React.createElement(
-    'p',
-    null,
-    user.age
-  ),
-  React.createElement(
-    'p',
-    null,
-    getLocation(user.location)
-  )
-);
+var reset = function reset() {
+  count = 0;
+  renderConterApp();
+};
 
 var appRoute = document.getElementById('app');
-ReactDOM.render(templateTwo, appRoute);
+
+var renderConterApp = function renderConterApp() {
+  var template = React.createElement(
+    'div',
+    null,
+    React.createElement(
+      'h1',
+      null,
+      'Count: ',
+      count
+    ),
+    React.createElement(
+      'button',
+      { onClick: addOne },
+      '+1'
+    ),
+    React.createElement(
+      'button',
+      { onClick: removeOne },
+      '-1'
+    ),
+    React.createElement(
+      'button',
+      { onClick: reset },
+      'Reset'
+    )
+  );
+  ReactDOM.render(template, appRoute);
+};
+
+renderConterApp();
