@@ -5,11 +5,37 @@ class IndecisionApp extends React.Component {
   constructor(props) {
     super(props)
     this.handleDeleteOptions = this.handleDeleteOptions.bind(this)
+    this.handleDeleteOption = this.handleDeleteOption.bind(this)
     this.handlePickOption = this.handlePickOption.bind(this)
     this.handleAddOption = this.handleAddOption.bind(this)
     this.state = {
-      options: []
+      options: props.options
     }
+  }
+
+  componentDidMount() {
+    try {
+      const json = localStorage.getItem('options')
+      const options = JSON.parse(json)
+      // We only want to set values options has some values otherwise not
+      if (options) {
+        this.setState({ options })
+      }
+    } catch (error) {}
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // this life cycle gets call with every change detected by the component.
+    // We only want it to get fired on options array length gets changed.
+    // We use localStorage to persist the data
+    if (prevState.options.length !== this.state.options.length) {
+      const json = JSON.stringify(this.state.options)
+      localStorage.setItem('options', json)
+    }
+  }
+
+  componentWillUnmount() {
+    console.log('componentWillUnmount')
   }
 
   handlePickOption() {
@@ -29,6 +55,9 @@ class IndecisionApp extends React.Component {
   handleDeleteOptions() {
     this.setState({ options: [] })
   }
+  handleDeleteOption(option) {
+    this.setState({ options: this.state.options.filter(O => option !== O) })
+  }
 
   render() {
     const title = 'Indecision '
@@ -43,11 +72,16 @@ class IndecisionApp extends React.Component {
         <Options
           options={this.state.options}
           handleDeleteOptions={this.handleDeleteOptions}
+          handleDeleteOption={this.handleDeleteOption}
         />
         <AddOption handleAddOption={this.handleAddOption} />
       </div>
     )
   }
+}
+
+IndecisionApp.defaultProps = {
+  options: []
 }
 
 const Header = props => {
@@ -57,6 +91,10 @@ const Header = props => {
       <h2>{props.subTitle}</h2>
     </div>
   )
+}
+
+Header.defaultProps = {
+  title: 'Indecision App'
 }
 
 const Action = props => {
@@ -74,14 +112,29 @@ const Options = props => {
     <div>
       <button onClick={props.handleDeleteOptions}>Remove All</button>
       {props.options.map(option => (
-        <Option key={option} optionText={option} />
+        <Option
+          key={option}
+          optionText={option}
+          handleDeleteOption={props.handleDeleteOption}
+        />
       ))}
     </div>
   )
 }
 
 const Option = props => {
-  return <div>{props.optionText}</div>
+  return (
+    <div>
+      {props.optionText}
+      <button
+        onClick={e => {
+          props.handleDeleteOption(props.optionText)
+        }}
+      >
+        Remove
+      </button>
+    </div>
+  )
 }
 
 class AddOption extends React.Component {
