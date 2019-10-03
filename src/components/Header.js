@@ -1,21 +1,15 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class Header extends Component {
-  render() {
-     
-    return (
-      <div>
-        <div className="container">
-         <div className="header">
-          <ul className="list">
-          {/* <li><a href="#">Home</a></li> */}
-          <p>
-              {'Header'}
-          </p>
-          </ul>
-         </div>
-        </div>
-      </div>
-    )
-  }
+const Header = props => {
+  return (
+    <div>
+      <h1>{props.title}</h1>
+      <h2>{props.subTitle}</h2>
+    </div>
+  )
 }
+
+Header.defaultProps = {
+  title: 'Indecision App'
+}
+export default Header
